@@ -1,0 +1,9 @@
+services:
+  postgres-cte:
+    image: postgres
+    environment:
+      POSTGRES_DB: cte
+      POSTGRES_USER: cte
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5433:5432

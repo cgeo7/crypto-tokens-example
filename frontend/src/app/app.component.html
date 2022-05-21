@@ -1,0 +1,82 @@
+<div class="container">
+
+  <h1 class="pt-3 pb-3">Crypto Prices</h1>
+
+  <div >
+    <div class="mb-6 row">
+      <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">
+        <b>Full text search:</b></label>
+      <div class="col-xs-3 col-sm-auto">
+        <input id="table-filtering-search"
+               class="form-control"
+               type="text" [formControl]="filter">
+      </div>
+      <div class="col-xs-2 col-sm-auto">
+        <button class="btn btn-primary" title="Add new token"
+                type="button"
+                (click)="onAddNewToken(modalContent)">
+          <i class="bi bi-plus"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+  <table class="table table-striped" *ngIf="isConnected$ | async">
+    <thead>
+    <tr>
+      <th scope="col" (click)="onSort('token')">
+        Token
+        <i class="bi" [class]="getSortedClass('token') | async"></i>
+      </th>
+      <th scope="col" (click)="onSort('symbol')">
+        Symbol
+        <i class="bi" [class]="getSortedClass('symbol') | async"></i>
+      </th>
+      <th scope="col" (click)="onSort('price')">
+        Price
+        <i class="bi" [class]="getSortedClass('price') | async"></i>
+      </th>
+      <th scope="col" (click)="onSort('volume')">
+        Volume
+        <i class="bi" [class]="getSortedClass('volume') | async"></i>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let token of filteredTokens$ | async; "
+        [ngStyle]="{'font-weight': token.highlight ? 'bold' : 'normal' }">
+      <td>{{token.token}}</td>
+      <td>{{token.symbol}}</td>
+      <td>{{token.price}}</td>
+      <td>{{token.volume}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #modalContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Create New Token</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form
+          [formGroup]="modalFormGroup"
+          (ngSubmit)="onModalSave(modal)"
+          id="modal-form">
+      <div class="mb-3 input-g">
+        <label for="tokenInput" class="form-label">Token</label>
+        <input id="tokenInput" ngbAutofocus class="form-control" formControlName="token"
+               placeholder="Enter token name">
+      </div>
+      <div class="mb-3">
+        <label for="symbolInput" class="form-label">Symbol</label>
+        <input id="symbolInput" class="form-control" formControlName="symbol"
+               placeholder="Enter symbol name">
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-primary" form="modal-form" >Save</button>
+  </div>
+</ng-template>
